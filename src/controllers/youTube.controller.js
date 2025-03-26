@@ -1,7 +1,7 @@
 import YouTube from "../models/Youtube.model.js";
 export const showMobileYoutubeLinks = async (req, res) => {
   try {
-    const allLinks = await YouTube.find();
+    const allLinks = await YouTube.find({ platform: "mobile" });
     console.log(allLinks);
     res.status(200).json({ links: allLinks });
   } catch (error) {
@@ -21,7 +21,7 @@ export const addYoutubeLinks = async (req, res) => {
 };
 export const showWebYoutubeLinks = async (req, res) => {
   try {
-    const allLinks = await YouTube.find();
+    const allLinks = await YouTube.find({ platform: "web" });
     console.log(allLinks);
     res.status(200).json({ links: allLinks });
   } catch (error) {
