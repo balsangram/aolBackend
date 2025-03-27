@@ -14,6 +14,8 @@ export const userType = async (req, res) => {
 
 export const addUserType = async (req, res) => {
   try {
+    console.log(req.file, "file uplode");
+
     const { usertype } = req.body;
     const imageUplode = await uploadCloudinary(req.file.path);
     console.log("imageUplode", imageUplode);
@@ -114,14 +116,22 @@ export const action = async (req, res) => {
 
 export const addAction = async (req, res) => {
   try {
-    console.log("Received request body:", req.body);
-
+    // console.log("Received request file:", req.file);
+    const imageUplode = await uploadCloudinary(req.file.path);
+    // console.log("imageUplode", imageUplode);
     let data = req.body; // Accepting both object & array
 
     // If a single object is received, convert it into an array
     if (!Array.isArray(data)) {
       data = [data];
     }
+    // console.log(data.actions, "data");
+    data.map((item) => {
+      item.action = item.actions.action;
+      item.link = item.actions.link;
+      delete item.actions;
+    });
+    console.log(data, "data 0 ");
 
     // Validate the data before insertion
     if (!data.every((item) => item.usertype && item.action && item.link)) {

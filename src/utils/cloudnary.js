@@ -1,7 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
 // import { response } from "express";
 import fs from "fs";
-import { loadEnvFile } from "process";
+// import { loadEnvFile } from "process";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
