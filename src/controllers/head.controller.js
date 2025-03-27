@@ -31,3 +31,37 @@ export const addHeadlines = async (req, res) => {
     res.status(500).json({ message: "internal server error" });
   }
 };
+
+export const updateHeading = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { headline } = req.body;
+    if (!headline) {
+      return res.status(400).json({ message: "first fill the form" });
+    }
+    const updateHeading = await Head.findByIdAndUpdate(
+      id,
+      { headline },
+      { new: true }
+    );
+    res
+      .status(200)
+      .json({ message: "Headline updated sucessafully", updateHeading });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+  }
+};
+
+export const deleteHeading = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const headlineDeleted = await Head.findByIdAndDelete(id);
+    if (!headlineDeleted) {
+      return res.status(400).json({ message: "headline is not deleted" });
+    }
+    res.status(200).json({ message: "headline is deleted sucessafully" });
+  } catch (error) {
+    res.status(500).json({ message: "internal server error" });
+  }
+};

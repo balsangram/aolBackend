@@ -9,7 +9,9 @@ import {
 } from "../controllers/customer.controller.js";
 import {
   addHeadlines,
+  deleteHeading,
   displayHeadlines,
+  updateHeading,
 } from "../controllers/head.controller.js";
 import {
   createCard,
@@ -48,14 +50,14 @@ router.delete("/userDelete/:id", deleteCustomer);
 // Headings
 router.get("/displayHeading", displayHeadlines);
 router.post("/addHeading", addHeadlines);
-router.patch("/updateHeading", updateHeading);
-router.delete("/deleteHeading", deleteHeading);
+router.patch("/updateHeading/:id", updateHeading);
+router.delete("/deleteHeading/:id", deleteHeading);
 
 //containers
 router.get("/showAllCards", showAllCards);
 router.post("/createCard", upload.single("img"), createCard);
-// router.patch("/updateCard/:id", updateCard);
-// router.delete("/removeCard/:id", removeCard);
+router.patch("/updateCard/:id", updateCard);
+router.delete("/removeCard/:id", removeCard);
 
 //user Types
 router.get("/userType", userType);
