@@ -41,11 +41,23 @@ export const addUserType = async (req, res) => {
 
 export const updateUserType = async (req, res) => {
   try {
-    const id = req.params;
-    const { img, usertype } = req.body;
-    const isUserType = await UserType.findByIdAndUpdate(id, { img, usertype });
-    if (!isUserType) return res.status(404).json({ message: "file not found" });
-    res.status(200).json({ message: "updated sucessafully" });
+    const { id } = req.params;
+    console.log(id, "id");
+
+    const { usertype } = req.body;
+    console.log(usertype, "userType");
+
+    const isUserType = await UserType.findByIdAndUpdate(
+      id,
+      { usertype },
+      { new: true }
+    );
+    if (!isUserType) {
+      console.log(isUserType, "isUserType");
+
+      return res.status(404).json({ message: "file not found" });
+    }
+    res.status(200).json({ message: "updated sucessafully", isUserType });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -53,13 +65,20 @@ export const updateUserType = async (req, res) => {
 
 export const deleteUserType = async (req, res) => {
   try {
-    const id = req.params;
-    const isUserType = await UserType.findByIdAndDelete(id);
-    if (!isUserType)
-      return res.status(404).json({ message: " file not found" });
-    res.status(200).json({ message: " id deleted sucessafully" });
+    console.log(req.params, "kkk");
+
+    const { id } = req.params;
+    console.log(`Attempting to delete UserType with ID: ${id}`);
+    const deletedUserType = await UserType.findByIdAndDelete(id);
+    if (!deletedUserType) {
+      return res.status(404).json({ message: "UserType not found" });
+    }
+    res.status(200).json({ message: "ID deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error deleting UserType:", error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };
 

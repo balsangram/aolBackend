@@ -23,8 +23,10 @@ import {
   action,
   addAction,
   addUserType,
+  deleteUserType,
+  updateUserType,
   userType,
-} from "../controllers/user.controller.js";
+} from "../controllers/userType.controller.js";
 import {
   addYoutubeLinks,
   deleteYoutubeLink,
@@ -33,6 +35,7 @@ import {
   updateYoutubeLink,
 } from "../controllers/youTube.controller.js";
 import { addAdv } from "../controllers/adv.controller.js";
+import UserType from "../models/UserType.model.js";
 const router = express.Router();
 
 // admin functionality
@@ -62,6 +65,8 @@ router.delete("/removeCard/:id", removeCard);
 //user Types
 router.get("/userType", userType);
 router.post("/addUserType", upload.single("img"), addUserType);
+router.patch("/updateUSerType/:id", updateUserType);
+router.delete("/deleteUSerType/:id", deleteUserType);
 
 //actions
 router.get("/displayAction/:usertype", action);
