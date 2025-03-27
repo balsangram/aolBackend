@@ -4,10 +4,24 @@ import { uploadCloudinary } from "../utils/cloudnary.js";
 // Show All Cards
 export const showAllCards = async (req, res) => {
   try {
-    const cards = await Card.find();
+    const { headline } = req.params;
+    console.log("Received headline:", headline);
+
+    // Find all cards that match the given headline
+    const cards = await Card.find({ headline });
+    console.log("Matching cards:", cards);
+
+    // If no cards are found, return a 404 error
+    if (cards.length === 0) {
+      return res
+        .status(404)
+        .json({ message: `No cards found with headline: ${headline}` });
+    }
+
     res.status(200).json(cards);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching cards:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 

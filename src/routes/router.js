@@ -57,11 +57,11 @@ router.delete("/userDelete/:id", deleteCustomer);
 // Headings
 router.get("/displayHeading", displayHeadlines);
 router.post("/addHeading", addHeadlines);
-router.patch("/updateHeading/:id", updateHeading);
+// router.patch("/updateHeading/:id", updateHeading);
 router.delete("/deleteHeading/:id", deleteHeading);
 
 //containers
-router.get("/showAllCards", showAllCards);
+router.get("/showAllCards/:headline", showAllCards);
 router.post("/createCard", upload.single("img"), createCard);
 router.patch("/updateCard/:id", updateCard);
 router.delete("/removeCard/:id", removeCard);
