@@ -2,8 +2,10 @@ import express from "express";
 import { upload } from "../middleware/multer.middleware.js";
 import { loginAdmin, registerAdmin } from "../controllers/admin.controller.js";
 import {
+  deleteCustomer,
   loginCustomer,
   registerCustomer,
+  updateCustomer,
 } from "../controllers/customer.controller.js";
 import {
   addHeadlines,
@@ -23,8 +25,10 @@ import {
 } from "../controllers/user.controller.js";
 import {
   addYoutubeLinks,
+  deleteYoutubeLink,
   showMobileYoutubeLinks,
   showWebYoutubeLinks,
+  updateYoutubeLink,
 } from "../controllers/youTube.controller.js";
 import { addAdv } from "../controllers/adv.controller.js";
 const router = express.Router();
@@ -38,14 +42,14 @@ router.post("/adminLogin", loginAdmin);
 // customer functionality
 router.post("/userRegister", registerCustomer);
 router.post("/userLogin", loginCustomer);
-// router.patch("/userUpdate");
-// router.delete("/userDelete");
+router.patch("/userUpdate/:id", updateCustomer);
+router.delete("/userDelete/:id", deleteCustomer);
 
 // Headings
 router.get("/displayHeading", displayHeadlines);
 router.post("/addHeading", addHeadlines);
-// router.patch("/updateHEading",);
-// router.delete("/deleteHEading",);
+router.patch("/updateHeading", updateHeading);
+router.delete("/deleteHeading", deleteHeading);
 
 //containers
 router.get("/showAllCards", showAllCards);
@@ -62,9 +66,15 @@ router.get("/displayAction/:usertype", action);
 router.post("/addAction", upload.any(), addAction);
 
 // YouTube Link
-router.post("/addYoutubeLinks", addYoutubeLinks);
+router.post("/addYoutubeLinks", upload.single("thumbnail"), addYoutubeLinks);
 router.get("/displayMobYoutubeLinks", showMobileYoutubeLinks);
 router.get("/displayWebYoutubeLinks", showWebYoutubeLinks);
+router.patch(
+  "/updateYoutubeLink/:id",
+  upload.single("thumbnail"),
+  updateYoutubeLink
+);
+router.delete("/deleteYoutubeLink/:id", deleteYoutubeLink);
 
 // Advertising
 router.post("/addAdv", upload.any(), addAdv);

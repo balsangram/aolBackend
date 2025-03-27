@@ -39,11 +39,6 @@ export const createCard = async (req, res) => {
 // Update Card
 export const updateCard = async (req, res) => {
   try {
-    // const token = req.header("Authorization");
-    // // console.log(token, "token");
-    // if(!token){
-    //  return res.status(401).json({ message: "Access denied. No token provided." });
-    // }
     const { id } = req.params;
     const { name, link } = req.body;
     const updatedCard = await Card.findByIdAndUpdate(
@@ -62,11 +57,6 @@ export const updateCard = async (req, res) => {
 // Delete Card
 export const removeCard = async (req, res) => {
   try {
-    // const token = req.header("Authorization");
-    // // console.log(token, "token");
-    // if(!token){
-    //  return res.status(401).json({ message: "Access denied. No token provided." });
-    // }
     const { id } = req.params;
     const deletedCard = await Card.findByIdAndDelete(id);
     if (!deletedCard)

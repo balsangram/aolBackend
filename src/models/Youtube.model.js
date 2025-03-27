@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 
 const youtubeSchema = new mongoose.Schema(
   {
+    thumbnail: {
+      type: String,
+    },
     YouTubeLink: {
       type: String,
       required: true, // Ensures a link is always provided

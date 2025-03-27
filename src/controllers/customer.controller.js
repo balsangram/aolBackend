@@ -56,3 +56,40 @@ export const loginCustomer = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const updateCustomer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id, "id", req.body);
+
+    const { name, phoneNo, aadhaarNo, email } = req.body;
+    const updatedCard = await Customer.findByIdAndUpdate(
+      id,
+      { name, phoneNo, aadhaarNo, email },
+      { new: true }
+    );
+    if (!updatedCard)
+      return res.status(404).json({ message: "Card not found" });
+    res.status(200).json({ message: "Card updated successfully", updatedCard });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteCustomer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id, "user ID");
+    const idCustomer = await Customer.findById(id);
+    if (!idCustomer) {
+      return res.status(404).json({ message: "customer is not available" });
+    }
+    const deleteCustomer = await Customer.findByIdAndDelete(id);
+    if (!deleteCustomer) {
+      return res.status(400).json({ message: "customer id not avelable" });
+    }
+    res.status(200).json({ message: "customer deleted Sucessafully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
