@@ -20,8 +20,6 @@ import {
   updateCard,
 } from "../controllers/card.controller.js";
 import {
-  action,
-  addAction,
   addUserType,
   deleteUserType,
   updateUserType,
@@ -34,8 +32,14 @@ import {
   showWebYoutubeLinks,
   updateYoutubeLink,
 } from "../controllers/youTube.controller.js";
-import { addAdv } from "../controllers/adv.controller.js";
+import { addAdv, getAdvs } from "../controllers/adv.controller.js";
 import UserType from "../models/UserType.model.js";
+import {
+  action,
+  addAction,
+  deleteAction,
+  updateAction,
+} from "../controllers/action.contoller.js";
 const router = express.Router();
 
 // admin functionality
@@ -71,6 +75,8 @@ router.delete("/deleteUSerType/:id", deleteUserType);
 //actions
 router.get("/displayAction/:usertype", action);
 router.post("/addAction", upload.any(), addAction);
+router.patch("/updateAction/:id", updateAction);
+router.delete("/deleteAction/:id", deleteAction);
 
 // YouTube Link
 router.post("/addYoutubeLinks", upload.single("thumbnail"), addYoutubeLinks);
@@ -85,5 +91,6 @@ router.delete("/deleteYoutubeLink/:id", deleteYoutubeLink);
 
 // Advertising
 router.post("/addAdv", upload.any(), addAdv);
+router.get("/displayAdvertisement", getAdvs);
 
 export default router;
