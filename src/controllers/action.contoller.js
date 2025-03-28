@@ -2,20 +2,18 @@ import Action from "../models/Action.model.js";
 import { uploadCloudinary } from "../utils/cloudnary.js";
 
 export const action = async (req, res) => {
-  console.log(req.params, "usertype query");
+  console.log(req.params, "usertype query"); // Logging query params correctly
 
   try {
-    const { usertype } = req.query; // Extract usertype from query params
-    console.log("Usertype Query:", req.query);
+    const { usertype } = req.params; // Extract usertype from query params
 
-    // If usertype is provided, filter; otherwise, return all actions
-    const query = usertype;
-    console.log(query, "query");
+    if (!usertype) {
+      return res.status(400).json({ message: "Usertype is required" });
+    }
 
-    const actions = await Action.find(query);
-    console.log("Filtered Actions:", actions);
+    const actions = await Action.find({ usertype }); // Filter actions by usertype
 
-    if (!actions.length) {
+    if (actions.length === 0) {
       return res
         .status(404)
         .json({ message: "No actions found for this usertype" });
@@ -24,7 +22,7 @@ export const action = async (req, res) => {
     res.status(200).json(actions);
   } catch (error) {
     console.error("Error fetching actions:", error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 

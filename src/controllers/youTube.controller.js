@@ -12,6 +12,8 @@ export const showMobileYoutubeLinks = async (req, res) => {
 export const addYoutubeLinks = async (req, res) => {
   try {
     const { YouTubeLink, platform } = req.body;
+    console.log(req.body, "body", req.file);
+
     const imageUplode = await uploadCloudinary(req.file.path);
     console.log("imageUplode", imageUplode);
 
@@ -24,6 +26,8 @@ export const addYoutubeLinks = async (req, res) => {
     await newLink.save();
     res.status(200).json({ link: newLink });
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({ message: error.message });
   }
 };
