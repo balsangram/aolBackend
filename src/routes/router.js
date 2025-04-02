@@ -63,7 +63,7 @@ router.delete("/deleteHeading/:id", deleteHeading);
 //containers
 router.get("/showAllCards/:headline", showAllCards);
 router.post("/createCard", upload.single("img"), createCard);
-router.patch("/updateCard/:id", updateCard);
+router.patch("/updateCard/:id", upload.single("img"), updateCard);
 router.delete("/removeCard/:id", removeCard);
 
 //user Types
@@ -75,7 +75,7 @@ router.delete("/deleteUSerType/:id", deleteUserType);
 //actions
 router.get("/displayAction/:usertype", action);
 router.post("/addAction", upload.any(), addAction);
-router.patch("/updateAction/:id", updateAction);
+router.patch("/updateAction/:id", upload.any(), updateAction);
 router.delete("/deleteAction/:id", deleteAction);
 
 // YouTube Link

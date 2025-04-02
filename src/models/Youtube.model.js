@@ -12,7 +12,7 @@ const youtubeSchema = new mongoose.Schema(
     platform: {
       type: String,
       enum: ["mobile", "web"], // Corrected enum
-      required: true, // Ensures platform is always provided
+      // required: true, // Ensures platform is always provided
     },
   },
   { timestamps: true }

@@ -28,24 +28,27 @@ export const action = async (req, res) => {
 
 export const addAction = async (req, res) => {
   try {
-    // console.log("Received request file:", req.file);
-    const imageUplode = await uploadCloudinary(req.file.path);
-    // console.log("imageUplode", imageUplode);
-    let data = req.body; // Accepting both object & array
+    console.log("Received request file:", req.file); // Debugging file
 
-    // If a single object is received, convert it into an array
-    if (!Array.isArray(data)) {
-      data = [data];
+    let imageUrl = null;
+    if (req.file) {
+      const imageUpload = await uploadCloudinary(req.file.path); // Upload image
+      imageUrl = imageUpload.secure_url; // Extract URL from Cloudinary response
     }
-    // console.log(data.actions, "data");
-    data.map((item) => {
-      item.action = item.actions.action;
-      item.link = item.actions.link;
-      delete item.actions;
-    });
-    console.log(data, "data 0 ");
 
-    // Validate the data before insertion
+    let data = req.body;
+    if (!Array.isArray(data)) {
+      data = [data]; // Convert single object to array
+    }
+
+    data = data.map((item) => ({
+      usertype: item.usertype,
+      action: item.action,
+      link: item.link,
+      img: imageUrl, // Store image URL in DB
+    }));
+
+    // Validate data
     if (!data.every((item) => item.usertype && item.action && item.link)) {
       return res
         .status(400)
@@ -54,7 +57,6 @@ export const addAction = async (req, res) => {
 
     // Insert into DB
     const newActions = await Action.insertMany(data);
-
     console.log("Inserted Actions:", newActions);
 
     res
@@ -66,34 +68,75 @@ export const addAction = async (req, res) => {
   }
 };
 
+import mongoose from "mongoose";
+
 export const updateAction = async (req, res) => {
   try {
-    const id = req.params;
-    const { usertype, language, img, action, link } = req.body;
-    const isAction = await Action.findByIdAndUpdate(id, {
-      usertype,
-      language,
-      img,
-      action,
-      link,
-    });
-    if (!isAction) {
-      return res.status(404).json({ message: "action not found" });
+    const { id } = req.params;
+    const { usertype, language, action, link } = req.body;
+
+    // Validate ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid action ID" });
     }
-    res.status(200).json({ message: "updated sucessafully" });
+
+    // Find existing action
+    const existingAction = await Action.findById(id);
+    if (!existingAction) {
+      return res.status(404).json({ message: "Action not found" });
+    }
+
+    let imageUrl = existingAction.img; // Retain old image by default
+
+    // If a new image is uploaded, process it
+    if (req.file?.path) {
+      try {
+        console.log("Received Image:", req.file);
+
+        // Upload to Cloudinary
+        const imageUpload = await uploadCloudinary(req.file.path);
+        imageUrl = imageUpload.secure_url;
+
+        // Optional: If you want to delete the old image from Cloudinary
+        // if (existingAction.img) await deleteCloudinaryImage(existingAction.img);
+      } catch (uploadError) {
+        console.error("Cloudinary Upload Error:", uploadError);
+        return res.status(500).json({ message: "Image upload failed" });
+      }
+    }
+
+    // Update fields (only if they exist in req.body)
+    existingAction.usertype = usertype?.trim() || existingAction.usertype;
+    existingAction.language = language?.trim() || existingAction.language;
+    existingAction.action = action?.trim() || existingAction.action;
+    existingAction.link = link?.trim() || existingAction.link;
+    existingAction.img = imageUrl; // Update image only if changed
+
+    // Save updated document
+    await existingAction.save();
+
+    res
+      .status(200)
+      .json({ message: "Updated successfully", action: existingAction });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error updating action:", error);
+    res.status(500).json({ message: error.message || "Internal Server Error" });
   }
 };
 
 export const deleteAction = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(id, "id");
+
     const isAction = await Action.findByIdAndDelete(id);
     if (!isAction) {
       return res.status(404).json({ message: "file not found" });
     }
-    res.status(200).json({ message: error.message });
+
+    console.log(isAction, "isAction");
+
+    res.status(200).json({ message: "action deleted sucessafully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

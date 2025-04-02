@@ -2,7 +2,7 @@ import Head from "../models/Head.model.js";
 export const displayHeadlines = async (req, res) => {
   try {
     const allHead = await Head.find();
-    console.log(allHead, "all headlines");
+    // console.log(allHead, "all headlines");
     if (allHead.length === 0) {
       return res.status(404).json({ message: "no headline available" });
     }

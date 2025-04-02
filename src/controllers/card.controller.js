@@ -5,11 +5,11 @@ import { uploadCloudinary } from "../utils/cloudnary.js";
 export const showAllCards = async (req, res) => {
   try {
     const { headline } = req.params;
-    console.log("Received headline:", headline);
+    // console.log("Received headline:", headline);
 
     // Find all cards that match the given headline
     const cards = await Card.find({ headline });
-    console.log("Matching cards:", cards);
+    // console.log("Matching cards:", cards);
 
     // If no cards are found, return a 404 error
     if (cards.length === 0) {
@@ -32,7 +32,7 @@ export const createCard = async (req, res) => {
 
     const { name, link, headline } = req.body;
     const imageUplode = await uploadCloudinary(req.file.path);
-    console.log("imageUplode", imageUplode);
+    // console.log("imageUplode", imageUplode);
 
     console.log("req", req.file);
 
@@ -54,16 +54,36 @@ export const createCard = async (req, res) => {
 export const updateCard = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(req.params, "id");
+
     const { name, link } = req.body;
-    const updatedCard = await Card.findByIdAndUpdate(
-      id,
-      { name, link },
-      { new: true }
-    );
-    if (!updatedCard)
+    console.log(req.body, "req.body");
+
+    let imageUrl = null;
+
+    if (req.file) {
+      const imageUpload = await uploadCloudinary(req.file.path);
+      imageUrl = imageUpload.url; // Assuming Cloudinary returns an object with a `url` field
+    }
+
+    const updateData = { name, link };
+    if (imageUrl) {
+      updateData.img = imageUrl; // Updating image only if a new file is uploaded
+    }
+
+    const updatedCard = await Card.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+
+    console.log(updatedCard, "updatedCard");
+
+    if (!updatedCard) {
       return res.status(404).json({ message: "Card not found" });
+    }
+
     res.status(200).json({ message: "Card updated successfully", updatedCard });
   } catch (error) {
+    console.error("Error updating card:", error);
     res.status(400).json({ message: error.message });
   }
 };
@@ -75,7 +95,7 @@ export const removeCard = async (req, res) => {
     const deletedCard = await Card.findByIdAndDelete(id);
     if (!deletedCard)
       return res.status(404).json({ message: "Card not found" });
-    res.status(200).json({ message: "Card removed successfully" });
+    res.status(200).json({ message: "Card removed successfully", deletedCard });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

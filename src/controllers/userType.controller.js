@@ -15,6 +15,7 @@ export const userType = async (req, res) => {
 export const addUserType = async (req, res) => {
   try {
     console.log(req.file, "file uplode");
+    console.log(req.body, "body");
 
     const { usertype } = req.body;
     const imageUplode = await uploadCloudinary(req.file.path);
