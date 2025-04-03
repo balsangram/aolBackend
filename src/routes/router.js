@@ -40,7 +40,8 @@ import {
   deleteAction,
   updateAction,
 } from "../controllers/action.contoller.js";
-import { addPopUp, displayPopUp } from "../controllers/popup.controller.js";
+
+import { addPopUp, displayPopUp } from "../controllers/popUp.controller.js";
 const router = express.Router();
 
 // admin functionality
