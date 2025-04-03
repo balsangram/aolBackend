@@ -90,6 +90,7 @@ router.patch(
 router.delete("/deleteYoutubeLink/:id", deleteYoutubeLink);
 
 // Advertising
+// router.post("/addAdv", upload.array("img", 3), addAdv);
 router.post("/addAdv", upload.any(), addAdv);
 router.get("/displayAdvertisement", getAdvs);
 
