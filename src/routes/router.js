@@ -40,6 +40,7 @@ import {
   deleteAction,
   updateAction,
 } from "../controllers/action.contoller.js";
+import { addPopUp, displayPopUp } from "../controllers/popup.controller.js";
 const router = express.Router();
 
 // admin functionality
@@ -93,5 +94,9 @@ router.delete("/deleteYoutubeLink/:id", deleteYoutubeLink);
 // router.post("/addAdv", upload.array("img", 3), addAdv);
 router.post("/addAdv", upload.any(), addAdv);
 router.get("/displayAdvertisement", getAdvs);
+
+//pop-up
+router.post("/addPopUp", upload.single("img"), addPopUp);
+router.get("/displayPopUp", displayPopUp);
 
 export default router;
