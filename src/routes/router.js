@@ -32,7 +32,10 @@ import {
   showWebYoutubeLinks,
   updateYoutubeLink,
 } from "../controllers/youTube.controller.js";
-import { addAdv, getAdvs } from "../controllers/adv.controller.js";
+import {
+  addAdvertisement,
+  getAdvertisements,
+} from "../controllers/adv.controller.js";
 import UserType from "../models/UserType.model.js";
 import {
   action,
@@ -92,9 +95,18 @@ router.patch(
 router.delete("/deleteYoutubeLink/:id", deleteYoutubeLink);
 
 // Advertising
-// router.post("/addAdv", upload.array("img", 3), addAdv);
-router.post("/addAdv", upload.any(), addAdv);
-router.get("/displayAdvertisement", getAdvs);
+router.post(
+  "/addAdv",
+  upload.fields([
+    { name: "img1", maxCount: 1 },
+    { name: "img2", maxCount: 1 },
+    { name: "img3", maxCount: 1 },
+  ]),
+  addAdvertisement
+);
+
+// router.post("/addAdv", upload.any(), addAdvertisement);
+router.get("/displayAdvertisement", getAdvertisements);
 
 //pop-up
 router.post("/addPopUp", upload.single("img"), addPopUp);
