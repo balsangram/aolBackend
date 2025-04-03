@@ -99,4 +99,6 @@ router.get("/displayAdvertisement", getAdvs);
 router.post("/addPopUp", upload.single("img"), addPopUp);
 router.get("/displayPopUp", displayPopUp);
 
+//
+
 export default router;
