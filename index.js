@@ -2,12 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./src/config/db.js";
-// import authRoutes from "./src/routes/authRoutes.js";
-// import cardRoutes from "./src/routes/cardRouter.js";
-// import { verifyToken } from './src/middleware/verifyToken.js';
-// import userRoutes from "./src/routes/userRoutes.js";
-// import { upload } from "./src/middleware/multer.middleware.js";
 import router from "./src/routes/router.js";
+import notificationRoutes from "./firebase.js"; // ✅ Correct Path
 
 dotenv.config();
 
@@ -26,6 +22,11 @@ app.use("/aol", router);
 // app.use('/cards',cardRoutes);
 // user type
 // app.use("/user", userRoutes);
+
+//notification
+app.use("/notifications", notificationRoutes);
+
+
 
 // healthy api
 app.get("/", (req, res) => {

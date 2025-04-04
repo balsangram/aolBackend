@@ -14,10 +14,14 @@ import {
   updateHeading,
 } from "../controllers/head.controller.js";
 import {
+  addHomeCard,
   createCard,
+  displayHomeCard,
   removeCard,
+  removeHomeCard,
   showAllCards,
   updateCard,
+  updateHomeCard,
 } from "../controllers/card.controller.js";
 import {
   addUserType,
@@ -71,6 +75,11 @@ router.post("/createCard", upload.single("img"), createCard);
 router.patch("/updateCard/:id", upload.single("img"), updateCard);
 router.delete("/removeCard/:id", removeCard);
 
+router.get("/displayHomeCard", displayHomeCard);
+router.post("/createHomeCard", upload.single("img"), addHomeCard);
+router.patch("/updateHomeCCard/:id", upload.single("img"), updateHomeCard);
+router.delete("/removeHomeCard/:id", removeHomeCard);
+
 //user Types
 router.get("/userType", userType);
 router.post("/addUserType", upload.single("img"), addUserType);
@@ -111,7 +120,5 @@ router.get("/displayAdvertisement", getAdvertisements);
 //pop-up
 router.post("/addPopUp", upload.single("img"), addPopUp);
 router.get("/displayPopUp", displayPopUp);
-
-//
 
 export default router;
